@@ -20,7 +20,7 @@ public class HangingLetters {
                                     {{0,0},{0,10},{0,20},{10,0},{10,10},{10,20}}, {{0,0},{2,20},{5,10},{8,20},{10,0}}, {{0,0},{0,10},{0,20},{10,0},{10,10},{10,20}},
                                     {{0,0},{0,10},{0,20},{10,10}}};
     
-    private int[][][] letterElements = { {{1,3}, {3,5}, {3,4}, {2,4},{4,6}}, // H
+    private int[][][] letterElements = { {{0,1}, {1,2}, {1,4}, {3,4},{4,5}}, // H
                                         {},  // E
                                         };
                                     
@@ -86,7 +86,7 @@ public class HangingLetters {
                 int[] thisNode = nodes[j];
                 // Ich glaub das rechnet in mm, darum alles x 100
                  //createNode(int id, double x, double y, double z)
-                 System.out.println(thisNode[0] + ":" + thisNode[1]);
+                 System.out.println(id + "- " + thisNode[0] + ":" + thisNode[1]);
                 model.createNode(id, thisNode[0]*100, thisNode[1]*100, 0);
                 id++;
             }
@@ -95,7 +95,7 @@ public class HangingLetters {
         
         
         
-        for (int i = 1; i <= id; i++) {
+        for (int i = 0; i < id; i++) {
             RectangleS r;
             r = model.createSection(i, RectangleS.TYPE, Truss2D.TYPE);
             r.setTKY(10); // mm
@@ -126,21 +126,16 @@ public class HangingLetters {
         model.getNode(1).setConstraint(c);
         model.getNode(2).setConstraint(c);
         
-        System.out.println("REALTABLES:");
-        System.out.println(model.getRealtables().length);
-        
-        int elemID = 1;
+        int elemID = 0;
         // elements
         for(int i=0; i<line1.length(); i++)
         {
             int [][] elems  = getLetterElements(line1.charAt(i));
-            for(int j=0; j<elems.length-1;j++)
+            for(int j=0; j<elems.length;j++)
             {
-                System.out.println("ELEMID:");
-                System.out.println(elemID);
                 int startNode = elems[j][0];
                 int endNode = elems[j][1];
-                System.out.println(startNode + ":" + endNode);
+                System.out.println(elemID + "- " + startNode + ":" + endNode);
                 model.createElement(elemID, Truss2D.TYPE, model.getMaterial(1), model.getRealtable(elemID), model.getNode(startNode), model.getNode(endNode));
                 elemID++;
             }
