@@ -1,0 +1,14 @@
+#BlueJ class context
+comment0.params=args
+comment0.target=void\ main(java.lang.String[])
+comment1.params=
+comment1.target=ThreeBarOpt()
+comment2.params=
+comment2.target=void\ computeStressConstraints()
+comment3.params=x
+comment3.target=double[]\ evaluate(double[])
+comment4.params=
+comment4.target=int\ countConstraints()
+comment5.params=
+comment5.target=inf.minife.fe.Model\ getModel()
+numComments=6
