@@ -64,7 +64,7 @@ public class HangingLetters {
         model.createMaterial(1, E, rho);
 
         
-        int id = 5;
+        int id = 6;
         for (int i = 0; i < id; i++) {
             RectangleS r;
             r = model.createSection(i, RectangleS.TYPE, Truss2D.TYPE);
@@ -108,19 +108,7 @@ public class HangingLetters {
                 elemID++;
             }
         }
-        
-        
-        
-
-
-        // nodes
-        //double b = 1000.0; // mm
-        //double h = 1000.0; // mm
-        //model.createNode(100, -b, 0, 0);
-        //model.createNode(200, 0, 0, 0);
-        //model.createNode(300, b, 0, 0);
-        //model.createNode(400, 0, -h, 0);
-
+       
         // forces
         Force f = new Force();
         //f.setValue(DOF.T_X, 20.0); // N
@@ -131,28 +119,11 @@ public class HangingLetters {
         Constraint c = new Constraint();
         c.setFree(DOF.T_X, false);
         c.setFree(DOF.T_Y, false);
+        c.setFree(DOF.T_Z, false);
         model.getNode(2).setConstraint(c);
         model.getNode(5).setConstraint(c);
-        
-        //int elemID = 0;
-        // elements
-        //for(int i=0; i<line1.length(); i++)
-        //{
-        //    int [][] elems  = getLetterElements(line1.charAt(i));
-        //    for(int j=0; j<elems.length;j++)
-         //   {
-         //       int startNode = elems[j][0];
-         //       int endNode = elems[j][1];
-         //       System.out.println(elemID + "- " + startNode + ":" + endNode);
-          //      model.createElement(elemID, Truss2D.TYPE, model.getMaterial(1), model.getRealtable(elemID), model.getNode(startNode), model.getNode(endNode));
-           //     elemID++;
-           // }
-        // }
-        
-        //model.createElement(1, Truss2D.TYPE, model.getMaterial(1),
-        //        model.getRealtable(1), model.getNode(1), model.getNode(4));
-        //model.createElement(2, Truss2D.TYPE, model.getMaterial(1),
-        //        model.getRealtable(2), model.getNode(2), model.getNode(4));
+        model.getNode(0).setConstraint(c);
+        model.getNode(3).setConstraint(c);
     }
 
     public Model getModel() {
