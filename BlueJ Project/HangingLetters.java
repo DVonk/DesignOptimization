@@ -5,12 +5,11 @@ import inf.minife.fe.DOF;
 import inf.minife.fe.Force;
 import inf.minife.fe.Model;
 import inf.minife.fe.RectangleS;
+import inf.minife.fe.Realtable;
 import inf.minife.fe.Truss2D;
+import inf.minife.fe.Beam2D;
+import inf.minife.fe.Truss3D;
 import inf.minife.view2.Viewer2;
-
-/**
- * @author kl Create a three bar structure similar to the ANSYS problem...
- */
 
 public class HangingLetters {
 
@@ -32,7 +31,7 @@ public class HangingLetters {
         Model m = new HangingLetters().getModel();
 
         m.printStructure();
-        //m.solve();
+        m.solve();
         m.printResults();
 
         Viewer2 viewer = new Viewer2(m);
@@ -62,14 +61,15 @@ public class HangingLetters {
         double E = 210000; // N/mm^2 (modulus of elasticity)
         double rho = 7.88E-6; // kg/mm^2 (density of steel)
         model.createMaterial(1, E, rho);
-
+        //Realtable realtable = model. createRealtable (1, Truss3D.TYPE);
         
-        int id = 6;
+        int id = 5;
         for (int i = 0; i < id; i++) {
             RectangleS r;
-            r = model.createSection(i, RectangleS.TYPE, Truss2D.TYPE);
-            r.setTKY(10); // mm
-            r.setTKZ(10); // mm
+            r = model.createSection(i, RectangleS.TYPE, Beam2D.TYPE);
+            r.setTKY(100); // mm
+            r.setTKZ(100);
+       
 
             // Realtable r = model.createRealtable(i, Truss2D.TYPE);
             // r.setValue(TrussElement.RT_A, A);
@@ -104,7 +104,7 @@ public class HangingLetters {
                     int nodeY = nodePositions[sndNode][1]*100;
                     model.createNode(sndNode+i*9, nodeX, nodeY, 0);
                 }
-                model.createElement(elemID, Truss2D.TYPE, model.getMaterial(1), model.getRealtable(elemID), model.getNode(fstNode+i*9), model.getNode(sndNode+i*9));
+                model.createElement(elemID, Beam2D.TYPE, model.getMaterial(1), model.getRealtable(elemID), model.getNode(fstNode+i*9), model.getNode(sndNode+i*9));
                 elemID++;
             }
         }
@@ -112,8 +112,8 @@ public class HangingLetters {
         // forces
         Force f = new Force();
         //f.setValue(DOF.T_X, 20.0); // N
-        f.setValue(DOF.T_Y, -200.0); // N
-        //model.getNode(3).setForce(f);
+        f.setValue(DOF.T_X, 20.0); // N
+        model.getNode(4).setForce(f);
 
         // constraints
         Constraint c = new Constraint();
