@@ -67,7 +67,7 @@ public class HangingLetters {
     }
     
     public HangingLetters() {
-        String line1 = "H";
+        String line1 = "HH";
         // model
         model = new Model();
 
@@ -87,7 +87,7 @@ public class HangingLetters {
                 // Ich glaub das rechnet in mm, darum alles x 100
                  //createNode(int id, double x, double y, double z)
                  System.out.println(id + "- " + thisNode[0] + ":" + thisNode[1]);
-                model.createNode(id, thisNode[0]*100, thisNode[1]*100, 0);
+                model.createNode(id, thisNode[0]*100+i*200, thisNode[1]*100, 0);
                 id++;
             }
         }
