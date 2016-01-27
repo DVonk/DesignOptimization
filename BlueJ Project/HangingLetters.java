@@ -16,7 +16,7 @@ public class HangingLetters {
 
     private Model model;
     
-    // Experimental: neue node generierung
+    // neue node generierung
     private int[][] nodePositions = {{0,0},{0,10},{0,20},{10,0},{10,10},{10,20},{5,0},{5,10},{5,20}};
     private int[][] A = {{0,1},{1,2},{2,5},{5,4},{4,3},{1,4}};
     private int[][] H = {{0,1},{1,2},{5,4},{4,3},{1,4}};
@@ -26,18 +26,7 @@ public class HangingLetters {
     private int[][] W = {{0,1},{1,2},{0,7},{3,7},{4,3},{4,5}};
     private int[][] R = {{0,1},{1,2},{2,5},{5,1},{1,3}};
     private int[][] D = {{0,1},{1,2},{2,8},{8,4},{4,6},{0,6}};
-    
-    // H E L O W R D   Bei gelegenheit vllt mal alphabetisch sortieren
-    // Letternodes sind die positionen der Nodes {x,y}. erster index ist der Buchstabe, siehe eine zeile dürber für reihenfolge
-    private int[][][] letternodes = {{{0,0},{0,10},{0,20},{10,0},{10,10},{10,20}}, {{0,0},{0,10},{0,20},{10,20}}, {{0,0},{0,10},{0,20},{10,0},{10,10},{10,20}}, 
-                                    {{0,0},{0,10},{0,20},{10,0},{10,10},{10,20}}, {{0,0},{2,20},{5,10},{8,20},{10,0}}, {{0,0},{0,10},{0,20},{10,0},{10,10},{10,20}},
-                                    {{0,0},{0,10},{0,20},{10,10}}};
-    
-    // LetterElements : z.B. {0,1} heißt (für diesen Buchstaben. NodeNummern beachten bei anderen!) Node 0 und Node 1 verbinden
-    private int[][][] letterElements = { {{0,1}, {1,2}, {1,4}, {3,4},{4,5}}, // H
-                                        {},  // E
-                                        };
-                                    
+
 
     public static void main(String[] args) {
         Model m = new HangingLetters().getModel();
@@ -61,27 +50,12 @@ public class HangingLetters {
            case 'W': return W;
            case 'R': return R;
            case 'D': return D;
-           default: return letternodes[0];
+           default: return H;
         }
     }
-    
-    public int[][] getLetterElements(char c)
-    {
-       switch(c)
-       {
-           case 'H': return letterElements[0];
-           case 'E': return letterElements[1];
-           case 'L': return letterElements[2];
-           case 'O': return letterElements[3];
-           case 'W': return letterElements[4];
-           case 'R': return letterElements[5];
-           case 'D': return letterElements[6];
-           default: return letterElements[0];
-        }
-    }
-    
+
     public HangingLetters() {
-        String line1 = "HELLO";
+        String line1 = "H";
         // model
         model = new Model();
 
@@ -90,7 +64,7 @@ public class HangingLetters {
         model.createMaterial(1, E, rho);
 
         
-        int id = 100;
+        int id = 5;
         for (int i = 0; i < id; i++) {
             RectangleS r;
             r = model.createSection(i, RectangleS.TYPE, Truss2D.TYPE);
@@ -149,16 +123,16 @@ public class HangingLetters {
 
         // forces
         Force f = new Force();
-        f.setValue(DOF.T_X, 30000.0); // N
-        f.setValue(DOF.T_Y, -20000.0); // N
-        //model.getNode(id-1).setForce(f);
+        //f.setValue(DOF.T_X, 20.0); // N
+        f.setValue(DOF.T_Y, -200.0); // N
+        //model.getNode(3).setForce(f);
 
         // constraints
         Constraint c = new Constraint();
         c.setFree(DOF.T_X, false);
         c.setFree(DOF.T_Y, false);
-        //model.getNode(1).setConstraint(c);
-        //model.getNode(2).setConstraint(c);
+        model.getNode(2).setConstraint(c);
+        model.getNode(5).setConstraint(c);
         
         //int elemID = 0;
         // elements
