@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.params=args
+comment0.target=void\ main(java.lang.String[])
+comment1.params=c
+comment1.target=int[][]\ getLetterNodes(char)
+comment2.params=
+comment2.target=TestLetters()
+comment3.params=
+comment3.target=inf.minife.fe.Model\ getModel()
+numComments=4

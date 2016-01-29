@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.params=
+comment0.target=Rahmen()
+comment0.text=\r\n\ Creates\ a\ frame\r\n
+comment1.params=z
+comment1.target=double\ ueberrollbuegel_x(double)
+comment1.text=\r\n\ Calc\ the\ x-coordinate\ for\ the\ roll\ hoop\ bracing\ for\ a\ z-coordinate\r\n
+comment2.params=z
+comment2.target=double\ motorbuegel_x(double)
+comment2.text=\r\n\ Calc\ the\ x-coordinate\ for\ the\ engine\ hoop\ for\ a\ z-coordinate\r\n
+numComments=3
