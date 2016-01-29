@@ -20,7 +20,7 @@ public class Pyramid {
 
 
     public static void main(String[] args) {
-        Model m = new Pyramid(1).getModel();
+        Model m = new Pyramid(6).getModel();
         
         m.printStructure();
         //m.solve();
