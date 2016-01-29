@@ -12,27 +12,48 @@ import inf.minife.fe.Truss3D;
 import inf.minife.fe.HollowCircleS;
 import inf.minife.view2.Viewer2;
 
-public class TestLetters {
-
+public class TestLetters 
+{
     private Model model;
     
     // neue node generierung
     private int[][] nodePositions = {{0,0},{0,10},{0,20},{10,0},{10,10},{10,20},{5,0},{5,10},{5,20}};
     private int[][] A = {{0,1},{1,2},{2,5},{5,4},{4,3},{1,4}};
-    private int[][] H = {{0,1},{1,2},{5,4},{4,3},{1,4}};
-    //private int[][] H = {{1,2},{5,4},{4,3},{1,4},{2,8}};
-    private int[][] E = {{0,1},{1,2},{2,5},{1,4},{0,3}};
-    private int[][] L = {{0,1},{1,2},{0,3}};
-    private int[][] O = {{0,1},{1,2},{2,5},{5,4},{4,3},{0,3}};
-    private int[][] W = {{0,1},{1,2},{0,7},{3,7},{4,3},{4,5}};
-    private int[][] R = {{0,1},{1,2},{2,5},{5,1},{1,3}};
+    private int[][] B = {{0,1},{1,2},{2,5},{5,7},{7,3},{0,3},{1,7}};
+    private int[][] C = {{0,1},{1,2},{2,5},{0,3}};
     private int[][] D = {{0,1},{1,2},{2,8},{8,4},{4,6},{0,6}};
+    private int[][] E = {{0,1},{1,2},{2,5},{1,4},{0,3}};
+    private int[][] F = {{0,1},{1,2},{2,5},{1,4}};
+    private int[][] G = {{0,1},{1,2},{2,5},{0,3},{4,7},{4,3}};
+    private int[][] H = {{0,1},{1,2},{5,4},{4,3},{1,4}};
     private int[][] I = {{6,7},{7,8}};
-    private int[][] T = {{6,7},{7,8},{2,8},{8,5}};
-    private int[][] V = {{2,6},{6,5}};
-    private int[][] Y = {{2,7},{7,5},{6,7}};
+    private int[][] J = {{0,1},{0,3},{3,4},{4,5}};
+    private int[][] K = {{0,1},{1,2},{1,5},{1,3}};
+    private int[][] L = {{0,1},{1,2},{0,3}};
+    private int[][] M = {{0,1},{1,2},{2,7},{7,5},{5,4},{4,3}};
+    private int[][] N = {{0,1},{1,2},{2,7},{7,3},{3,4},{4,5}};
+    private int[][] O = {{0,1},{1,2},{2,5},{5,4},{4,3},{0,3}};
+    private int[][] P = {{0,1},{1,2},{2,5},{5,4},{4,1}};
+    private int[][] Q = {{0,1},{1,2},{2,5},{5,4},{4,3},{0,3},{3,7}};
+    private int[][] R = {{0,1},{1,2},{2,5},{5,1},{1,3}};
     private int[][] S = {{1,2},{4,3},{1,4},{2,5},{3,0}};
-    private int[][] n8 ={{0,1},{1,2},{2,5},{5,4},{4,3},{3,0},{1,4}};
+    private int[][] T = {{6,7},{7,8},{2,8},{8,5}};
+    private int[][] U = {{0,1},{1,2},{0,3},{3,4},{4,5}};
+    private int[][] V = {{2,6},{6,5}};
+    private int[][] W = {{0,1},{1,2},{0,7},{3,7},{4,3},{4,5}};
+    private int[][] X = {{2,7},{7,3},{0,7},{7,5}};
+    private int[][] Y = {{2,7},{7,5},{6,7}};
+    private int[][] Z = {{2,5},{5,7},{7,0},{0,3}};
+    private int[][] n0 = {{0,1},{1,2},{2,5},{5,4},{4,3},{0,3},{0,7},{7,5}};
+    private int[][] n1 = {{3,4},{4,5}};
+    private int[][] n2 = {{2,5},{5,4},{4,1},{1,0},{0,3}};
+    private int[][] n3 = {{2,5},{5,4},{4,1},{3,0},{4,3}};
+    private int[][] n4 = {{2,1},{1,4},{5,4},{4,3}};
+    private int[][] n5 = {{5,2},{2,1},{1,4},{4,3},{3,0}};
+    private int[][] n6 = {{0,1},{1,2},{2,5},{0,3},{3,4},{4,1}};
+    private int[][] n7 = {{2,5},{5,4},{4,3}};
+    private int[][] n8 = {{0,1},{1,2},{2,5},{5,4},{4,3},{3,0},{1,4}};
+    private int[][] n9 = {{1,2},{2,5},{5,4},{4,3},{3,0},{1,4}};
     public HollowCircleS rTable;
 
 
@@ -51,25 +72,49 @@ public class TestLetters {
     {
        switch(c)
        {
-           case 'H': return H;
-           case 'E': return E;
-           case 'L': return L;
-           case 'O': return O;
-           case 'W': return W;
-           case 'R': return R;
+           case 'A': return A;
+           case 'B': return B;
+           case 'C': return C;
            case 'D': return D;
+           case 'E': return E;
+           case 'F': return F;
+           case 'G': return G;
+           case 'H': return H;
            case 'I': return I;
-           case 'T': return T;
-           case 'V': return V;
+           case 'J': return J;
+           case 'K': return K;
+           case 'L': return L;
+           case 'M': return M;
+           case 'N': return N;
+           case 'O': return O;
+           case 'P': return P;
+           case 'Q': return Q;
+           case 'R': return R;
            case 'S': return S;
+           case 'T': return T;
+           case 'U': return U;
+           case 'V': return V;
+           case 'W': return W;
+           case 'X': return X;
+           case 'Y': return Y;
+           case 'Z': return Z;
+           case '0': return n0;
+           case '1': return n1;
+           case '2': return n2;
+           case '3': return n3;
+           case '4': return n4;
+           case '5': return n5;
+           case '6': return n6;
+           case '7': return n7;
            case '8': return n8;
+           case '9': return n9;
            default: return H;
         }
     }
 
     public TestLetters() 
     {
-        String line1 = "HELLEEWORLD";
+        String line1 = "HELLO123";
         // model
         model = new Model();
         
