@@ -49,34 +49,33 @@ public class TestLettersOpt extends ProblemType1 implements ModelProvider {
         letters = new TestLetters();
         model = letters.getModel();
 
-        addDesignVariable("middle bar diameter [mm]", 50, 100, 150);
-        addDesignVariable("middle bar wall thickness [mm]", 1, 2, 3);
+        addDesignVariable("middle bar diameter [mm]", 50, 100, 200);
+        addDesignVariable("middle bar wall thickness [mm]", 1, 2, 4);
 
-        addFunctionName(0, "total mass [kg]");
-        for (int i = 0; i < countConstraints(); i++) {
-            addFunctionName("stress member " + (i + 1));
+        addFunctionName(0, "diameter [mm]");
+        for (int i = 0; i < model.getElements().length; i++) 
+        {
+            addFunctionName("stress member " + i + "at Node I");
+            addFunctionName("stress member " + i + "at Node J");
         }
-
+        
         // update
         evaluate(getInitial());
-
-        // Realtable rt[] = model.getRealtables();
-        // System.out.println("rt length=" + rt.length);
-        // for (int i = 0; i < rt.length; i++) {
-        // System.out.println(rt[i]);
-        // }
-        // System.out.println();
     }
 
     void computeStressConstraints() {
 
         Element[] elements = model.getElements();
         int n = elements.length;
+        int off = countObjectives();
         double sigma;
 
-        for (int i = 0; i < n; i++) {
-            sigma = elements[i].getResult(Truss2D.RS_STRESS);
-            f[i + 1] = Math.abs(sigma) / sigmaMax - 1.0;
+        for (int i = 0; i < n; i++) 
+        {
+            sigma = elements[i].getResult(Beam3D.RS_SMAX_I);
+            f[i] = Math.abs(sigma) / sigmaMax - 1.0;
+            sigma = elements[i].getResult(Beam3D.RS_SMAX_J);
+            f[i+off] = Math.abs(sigma) / sigmaMax - 1.0;
         }
     }
 
@@ -91,7 +90,8 @@ public class TestLettersOpt extends ProblemType1 implements ModelProvider {
         model.getNode(1).setCoordinate(Node.X, -b);
         model.getNode(3).setCoordinate(Node.X, b);
 
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= 3; i++) 
+        {
             HollowCircleS r  = (HollowCircleS) model.getRealtable(i);
             r.setDiameter(20); //mm
             r.setWTK(2);
@@ -107,12 +107,14 @@ public class TestLettersOpt extends ProblemType1 implements ModelProvider {
     }
 
     @Override
-    public int countConstraints() {
+    public int countConstraints() 
+    {
         return model.getElements().length;
     }
 
     @Override
-    public Model getModel() {
+    public Model getModel() 
+{
         return model;
     }
 }
