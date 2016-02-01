@@ -18,6 +18,8 @@ public class TestLetters
     
     // neue node generierung
     private int[][] nodePositions = {{0,0},{0,10},{0,20},{10,0},{10,10},{10,20},{5,0},{5,10},{5,20}};
+    private int[][] supportNodes = {{0,1},{0,6},{1,2},{1,7},{2,8},{3,4},{3,6},{4,5},{4,7},{5,8},{6,7},{7,8}};
+    private int[][] space = {};
     private int[][] A = {{0,1},{1,2},{2,5},{5,4},{4,3},{1,4}};
     private int[][] B = {{0,1},{1,2},{2,5},{5,7},{7,3},{0,3},{1,7}};
     private int[][] C = {{0,1},{1,2},{2,5},{0,3}};
@@ -54,7 +56,8 @@ public class TestLetters
     private int[][] n7 = {{2,5},{5,4},{4,3}};
     private int[][] n8 = {{0,1},{1,2},{2,5},{5,4},{4,3},{3,0},{1,4}};
     private int[][] n9 = {{1,2},{2,5},{5,4},{4,3},{3,0},{1,4}};
-    public HollowCircleS rTable;
+    
+    public HollowCircleS rTable, rTable2;
 
 
     public static void main(String[] args) {
@@ -72,6 +75,7 @@ public class TestLetters
     {
        switch(c)
        {
+           case ' ': return space;
            case 'A': return A;
            case 'B': return B;
            case 'C': return C;
@@ -114,7 +118,7 @@ public class TestLetters
 
     public TestLetters() 
     {
-        String line1 = "HELLO123";
+        String line1 = "HELLO 123";
         // model
         model = new Model();
         
@@ -133,20 +137,13 @@ public class TestLetters
         c.setFree(DOF.T_Y, false);
         c.setFree(DOF.T_Z, false);
         
-        int id = 10000;
-        for (int i = 0; i < id; i++) {
-            //RectangleS r;
-            //r = model.createSection(i, RectangleS.TYPE, Beam2D.TYPE);
-            //r = model.createSection(i, RectangleS.TYPE, Beam2D.TYPE);
-            //r.setTKY(100); // mm
-            //r.setTKZ(100);
-            rTable = new HollowCircleS();
-            rTable.setDiameter(55); //mm
-            rTable.setWTK(2); //mm
-            // Realtable r = model.createRealtable(i, Truss2D.TYPE);
-            // r.setValue(TrussElement.RT_A, A);
-        }
+        rTable = new HollowCircleS();
+        rTable.setDiameter(180); //mm
+        rTable.setWTK(20);
         
+        rTable2 = new HollowCircleS();
+        rTable2.setDiameter(20); //mm
+        rTable2.setWTK(2);
         //Questange oben
         /*int sumNodes = line1.length();
         int elemID = 0;
@@ -167,24 +164,68 @@ public class TestLetters
         //*Buchstaben in String duchgehen
         for(int i=0; i<line1.length(); i++)
         {
+            int upperConnect, lowerConnect;
             //Nodes in Buchstaben durchgehen
             int[][] nodes = getLetterNodes(line1.charAt(i));//nodePositions;
+            // Hinteres Gerüst
+            for(int j=0; j<supportNodes.length; j++)
+            {
+                HollowCircleS cS = model.createSection(elemID, rTable.TYPE, Beam3D.TYPE);
+                int[] thisNode = supportNodes[j];
+                int fstNode = thisNode[0];
+                int sndNode = thisNode[1];
+                System.out.println("j: " +j);    
+                
+                if(model.getNode(fstNode+i*18) == null)
+                {
+                    int nodeX = nodePositions[fstNode][0]*100+i*1000+i*200;
+                    int nodeY = nodePositions[fstNode][1]*100;
+                    model.createNode(sumNodes+fstNode+i*18, nodeX, nodeY, -300);
+                    System.out.println("node: " +(fstNode+i*18) + " created");    
+                }
+                if(model.getNode(sndNode+i*18) == null)
+                {
+                    int nodeX = nodePositions[sndNode][0]*100+i*1000+i*200;
+                    int nodeY = nodePositions[sndNode][1]*100;
+                    model.createNode(sumNodes+sndNode+i*18, nodeX, nodeY, -300);
+                    System.out.println("node: " +(sndNode+i*18) + " created");    
+                }
+                cS = model.createSection(++elemID, rTable2.TYPE, Beam3D.TYPE);
+                cS.setDiameter(rTable2.getDiameter());
+                cS.setWTK(rTable2.getWTK());    
+                model.createElement(elemID, Beam3D.TYPE, model.getMaterial(1),model.getRealtable(elemID++), model.getNode(sumNodes+fstNode+i*18), model.getNode(sumNodes+sndNode+i*18));
+                
+                if(i>0 && j==supportNodes.length-1)
+                {
+                    cS = model.createSection(elemID, rTable2.TYPE, Beam3D.TYPE);
+                    cS.setDiameter(rTable2.getDiameter());
+                    cS.setWTK(rTable2.getWTK());    
+                    model.createElement(elemID, Beam3D.TYPE, model.getMaterial(1),model.getRealtable(elemID++), model.getNode(sumNodes+5+(i-1)*18), model.getNode(sumNodes+2+i*18));
+                    cS = model.createSection(elemID, rTable2.TYPE, Beam3D.TYPE);
+                    cS.setDiameter(rTable2.getDiameter());
+                    cS.setWTK(rTable2.getWTK());    
+                    model.createElement(elemID, Beam3D.TYPE, model.getMaterial(1),model.getRealtable(elemID++), model.getNode(sumNodes+3+(i-1)*18), model.getNode(sumNodes+0+i*18));
+                }
+            }
+            
+            
+            
             for(int j=0; j<nodes.length; j++)
             {
                 int[] thisNode = nodes[j];
                 // Ich glaub das rechnet in mm, darum alles x 100
                 //createNode(int id, double x, double y, double z)
                 int fstNode = thisNode[0];
-                int sndNode = thisNode[1];
-                System.out.println((sumNodes+fstNode) + " : " + sndNode);               
+                int sndNode = thisNode[1];       
                 
                 // Beide Node-Nr werden überprüft ob sie in diesem Buchstaben schon existieren
-                if(model.getNode(fstNode+i*18) == null)
+                if(model.getNode(fstNode+i*18+9) == null)
                 {
                     int nodeX = nodePositions[fstNode][0]*100+i*1000+i*200;
                     int nodeY = nodePositions[fstNode][1]*100;
-                    model.createNode(sumNodes+fstNode+i*18, nodeX, nodeY, 0);
-                    model.createNode(sumNodes+fstNode+i*18+9, nodeX, nodeY, 100);
+                    
+                    model.createNode(sumNodes+fstNode+i*18+9, nodeX, nodeY, 0);
+                    //model.createNode(sumNodes+fstNode+i*18+9, nodeX, nodeY, 100);
                     if(fstNode == 0 || fstNode == 3 || fstNode == 6)
                         {
                             model.getNode(sumNodes+fstNode+i*18).setConstraint(c);
@@ -200,12 +241,13 @@ public class TestLetters
                             
                         }
                 }
-                if(model.getNode(sndNode+i*18) == null)
+                if(model.getNode(sndNode+i*18+9) == null)
                 {
                     int nodeX = nodePositions[sndNode][0]*100+i*1000+i*200;
                     int nodeY = nodePositions[sndNode][1]*100;
-                    model.createNode(sumNodes+sumNodes+sndNode+i*18, nodeX, nodeY, 0);
-                    model.createNode(sumNodes+sumNodes+sndNode+i*18+9, nodeX, nodeY, 100);
+                    
+                    model.createNode(sumNodes+sndNode+i*18+9, nodeX, nodeY, 0);
+                    //model.createNode(sumNodes+sumNodes+sndNode+i*18+9, nodeX, nodeY, 100);
                     if(sndNode == 0 || sndNode == 3 || sndNode == 6)
                         {
                             model.getNode(sumNodes+sndNode+i*18).setConstraint(c);
@@ -225,19 +267,15 @@ public class TestLetters
                HollowCircleS cS = model.createSection(elemID, rTable.TYPE, Beam3D.TYPE);
                cS.setDiameter(rTable.getDiameter());
                cS.setWTK(rTable.getWTK());               
-               model.createElement(elemID, Beam3D.TYPE, model.getMaterial(1),model.getRealtable(elemID++), model.getNode(sumNodes+fstNode+i*18), model.getNode(sumNodes+sndNode+i*18));
-               cS = model.createSection(elemID, rTable.TYPE, Beam3D.TYPE);
-               cS.setDiameter(rTable.getDiameter());
-               cS.setWTK(rTable.getWTK());    
                model.createElement(elemID, Beam3D.TYPE, model.getMaterial(1),model.getRealtable(elemID++), model.getNode(sumNodes+fstNode+i*18+9), model.getNode(sumNodes+sndNode+i*18+9));
                cS = model.createSection(elemID, rTable.TYPE, Beam3D.TYPE);
                cS.setDiameter(rTable.getDiameter());
                cS.setWTK(rTable.getWTK());    
-               model.createElement(elemID, Beam3D.TYPE, model.getMaterial(1),model.getRealtable(elemID++), model.getNode(sumNodes+fstNode+i*18), model.getNode(sumNodes+fstNode+i*18+9)); 
+               model.createElement(elemID, Beam3D.TYPE, model.getMaterial(1),model.getRealtable(elemID++), model.getNode(sumNodes+fstNode+i*18+9), model.getNode(sumNodes+fstNode+i*18)); 
                cS = model.createSection(elemID, rTable.TYPE, Beam3D.TYPE);
                cS.setDiameter(rTable.getDiameter());
                cS.setWTK(rTable.getWTK());    
-               model.createElement(elemID, Beam3D.TYPE, model.getMaterial(1),model.getRealtable(elemID++), model.getNode(sumNodes+sndNode+i*18), model.getNode(sumNodes+sndNode+i*18+9));
+               model.createElement(elemID, Beam3D.TYPE, model.getMaterial(1),model.getRealtable(elemID++), model.getNode(sumNodes+sndNode+i*18+9), model.getNode(sumNodes+sndNode+i*18));
             }
         }//*/
         
