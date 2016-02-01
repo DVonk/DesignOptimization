@@ -14,79 +14,70 @@ import inf.minife.view2.Viewer2;
 
 public class ThreeBar {
 
-    private Model model;
+	private Model model;
 
-    public static void main(String[] args) {
-        Model m = new ThreeBar().getModel();
+	public static void main(String[] args) {
+		Model m = new ThreeBar().getModel();
 
-        m.printStructure();
-        //m.solve();
-        m.printResults();
+		m.printStructure();
+		m.solve();
+		m.printResults();
 
-        Viewer2 viewer = new Viewer2(m);
-        viewer.setVisible(true);
-    }
+		Viewer2 viewer = new Viewer2(m);
+		viewer.setVisible(true);
+	}
 
-    public ThreeBar() {
+	public ThreeBar() {
 
-        // model
-        model = new Model();
+		// model
+		model = new Model();
 
-        double E = 210000; // N/mm^2 (modulus of elasticity)
-        double rho = 7.88E-6; // kg/mm^2 (density of steel)
-        model.createMaterial(1, E, rho);
+		double E = 210000; // N/mm^2 (modulus of elasticity)
+		double rho = 7.88E-6; // kg/mm^2 (density of steel)
+		model.createMaterial(1, E, rho);
 
-        for (int i = 1; i <= 6; i++) {
-            RectangleS r;
-            r = model.createSection(i, RectangleS.TYPE, Truss2D.TYPE);
-            r.setTKY(10); // mm
-            r.setTKZ(10); // mm
+		for (int i = 1; i <= 3; i++) {
+			RectangleS r;
+			r = model.createSection(i, RectangleS.TYPE, Truss2D.TYPE);
+			r.setTKY(10); // mm
+			r.setTKZ(10); // mm
 
-            // Realtable r = model.createRealtable(i, Truss2D.TYPE);
-            // r.setValue(TrussElement.RT_A, A);
-        }
+			// Realtable r = model.createRealtable(i, Truss2D.TYPE);
+			// r.setValue(TrussElement.RT_A, A);
+		}
 
-        // nodes
-        double b = 1000.0; // mm
-        double h = 1000.0; // mm
-        model.createNode(1, -b, 0, 0);
-        model.createNode(2, 0, 0, 0);
-        model.createNode(3, b, 0, 0);
-        model.createNode(4, 0, -h, 0);
-        model.createNode(5,-b, -h, 0);
-        model.createNode(6, b, -h, 0);
-        model.createNode(7, -(b+100), 0, 0);
+		// nodes
+		double b = 1000.0; // mm
+		double h = 1000.0; // mm
+		model.createNode(1, -b, 0, 0);
+		model.createNode(2, 0, 0, 0);
+		model.createNode(3, b, 0, 0);
+		model.createNode(4, 0, -h, 0);
 
-        // forces
-        Force f = new Force();
-        f.setValue(DOF.T_X, 30000.0); // N
-        f.setValue(DOF.T_Y, -20000.0); // N
-        model.getNode(4).setForce(f);
+		// forces
+		Force f = new Force();
+		f.setValue(DOF.T_X, 30000.0); // N
+		f.setValue(DOF.T_Y, -20000.0); // N
+		model.getNode(4).setForce(f);
 
-        // constraints
-        Constraint c = new Constraint();
-        c.setFree(DOF.T_X, false);
-        c.setFree(DOF.T_Y, false);
-        model.getNode(1).setConstraint(c);
-        model.getNode(2).setConstraint(c);
-        model.getNode(3).setConstraint(c);
+		// constraints
+		Constraint c = new Constraint();
+		c.setFree(DOF.T_X, false);
+		c.setFree(DOF.T_Y, false);
+		model.getNode(1).setConstraint(c);
+		model.getNode(2).setConstraint(c);
+		model.getNode(3).setConstraint(c);
 
-        // elements
-        model.createElement(1, Truss2D.TYPE, model.getMaterial(1),
-                model.getRealtable(1), model.getNode(7), model.getNode(5));
-        model.createElement(2, Truss2D.TYPE, model.getMaterial(1),
-                model.getRealtable(2), model.getNode(2), model.getNode(4));
-        model.createElement(3, Truss2D.TYPE, model.getMaterial(1),
-                model.getRealtable(3), model.getNode(3), model.getNode(4));
-        model.createElement(4, Truss2D.TYPE, model.getMaterial(1),
-                model.getRealtable(4), model.getNode(3), model.getNode(2));
-        model.createElement(5, Truss2D.TYPE, model.getMaterial(1),
-				model.getRealtable(5), model.getNode(1), model.getNode(2));
-		model.createElement(6, Truss2D.TYPE, model.getMaterial(1),
-				model.getRealtable(6), model.getNode(4), model.getNode(7));
-    }
+		// elements
+		model.createElement(1, Truss2D.TYPE, model.getMaterial(1),
+				model.getRealtable(1), model.getNode(1), model.getNode(4));
+		model.createElement(2, Truss2D.TYPE, model.getMaterial(1),
+				model.getRealtable(2), model.getNode(2), model.getNode(4));
+		model.createElement(3, Truss2D.TYPE, model.getMaterial(1),
+				model.getRealtable(3), model.getNode(3), model.getNode(4));
+	}
 
-    public Model getModel() {
-        return model;
-    }
+	public Model getModel() {
+		return model;
+	}
 }

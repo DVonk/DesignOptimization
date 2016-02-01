@@ -7,4 +7,6 @@ comment2.params=
 comment2.target=TestLetters()
 comment3.params=
 comment3.target=inf.minife.fe.Model\ getModel()
-numComments=4
+comment4.params=l
+comment4.target=java.lang.Boolean\ gerade(int)
+numComments=5
