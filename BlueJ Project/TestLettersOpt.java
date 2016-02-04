@@ -71,7 +71,7 @@ public class TestLettersOpt extends ProblemType1 implements ModelProvider {
         int off = countObjectives();
         double sigma;
 
-        for (int i = 0; i < n; i=i+2) 
+        for (int i = 1; i < n; i=i+2) 
         {
             System.out.println((i*2) + "/" + f.length);
             sigma = elements[i].getResult(Beam3D.RS_SMAX_I);
