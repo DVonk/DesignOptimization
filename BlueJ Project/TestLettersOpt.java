@@ -13,6 +13,7 @@ import inf.minife.fe.HollowCircleS;
 import org.mopack.sopti.problems.ProblemType1;
 import org.mopack.sopti.ui.swing.minife.ModelProvider;
 import org.mopack.sopti.ui.swing.minife.OptViewer;
+import java.util.*;
 
 /**
  * @author kl
@@ -36,7 +37,7 @@ public class TestLettersOpt extends ProblemType1 implements ModelProvider {
     
     double sigmaMax = 250; // N/mm^2
 
-    TestLetters letters;    
+    TestLettersRect letters;    
     Model model;
 
     public static void main(String[] args) 
@@ -46,11 +47,10 @@ public class TestLettersOpt extends ProblemType1 implements ModelProvider {
 
     public TestLettersOpt() {
 
-        letters = new TestLetters();
+        letters = new TestLettersRect();
         model = letters.getModel();
 
-        addDesignVariable("middle bar diameter [mm]", 50, 100, 200);
-        addDesignVariable("middle bar wall thickness [mm]", 1, 2, 4);
+        addDesignVariable("support bar widths [mm]", 50, 100, 200);
 
         addFunctionName(0, "diameter [mm]");
         for (int i = 0; i < model.getElements().length; i++) 
@@ -66,16 +66,18 @@ public class TestLettersOpt extends ProblemType1 implements ModelProvider {
     void computeStressConstraints() {
 
         Element[] elements = model.getElements();
+        System.out.println("Elements: " + elements.length);
         int n = elements.length;
         int off = countObjectives();
         double sigma;
 
-        for (int i = 0; i < n; i++) 
+        for (int i = 0; i < n/2; i=i+2) 
         {
+            System.out.println((i*2) + "/" + f.length);
             sigma = elements[i].getResult(Beam3D.RS_SMAX_I);
             f[i] = Math.abs(sigma) / sigmaMax - 1.0;
             sigma = elements[i].getResult(Beam3D.RS_SMAX_J);
-            f[i+off] = Math.abs(sigma) / sigmaMax - 1.0;
+            f[i+1] = Math.abs(sigma) / sigmaMax - 1.0;
         }
     }
 
@@ -83,24 +85,24 @@ public class TestLettersOpt extends ProblemType1 implements ModelProvider {
     public double[] evaluate(double[] x) {
 
         f = new double[1 + countConstraints()];
-
-        // the suppor   t width
+        int elemID = model.getElements().length;
+        // the support width
         double b = x[0];
-
-        model.getNode(1).setCoordinate(Node.X, -b);
-        model.getNode(3).setCoordinate(Node.X, b);
-
-        for (int i = 1; i <= 3; i++) 
+        ArrayList<Integer> nodes = letters.getOptimizeThis();
+        int j;
+        for(int i=0; i<nodes.size(); i++)
         {
-            HollowCircleS r  = (HollowCircleS) model.getRealtable(i);
-            r.setDiameter(20); //mm
-            r.setWTK(2);
+            j = nodes.get(i);
+            RectangleS cS = (RectangleS) model.getRealtable(j);
+            cS.setTKY(b);
+            cS.setTKZ(b);
         }
+
 
         // run analysis
         model.solve();
 
-        f[0] = model.getTotalMass();
+        f[0] = x[0];
         computeStressConstraints();
 
         return f;
