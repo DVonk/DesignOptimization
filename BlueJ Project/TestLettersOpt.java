@@ -50,7 +50,7 @@ public class TestLettersOpt extends ProblemType1 implements ModelProvider {
         letters = new TestLettersRect();
         model = letters.getModel();
 
-        addDesignVariable("support bar widths [mm]", 50, 100, 200);
+        addDesignVariable("support bar widths [mm]", 10, 100, 200);
 
         addFunctionName(0, "diameter [mm]");
         for (int i = 0; i < model.getElements().length; i++) 
@@ -71,7 +71,7 @@ public class TestLettersOpt extends ProblemType1 implements ModelProvider {
         int off = countObjectives();
         double sigma;
 
-        for (int i = 0; i < n/2; i=i+2) 
+        for (int i = 0; i < n; i=i+2) 
         {
             System.out.println((i*2) + "/" + f.length);
             sigma = elements[i].getResult(Beam3D.RS_SMAX_I);
@@ -102,7 +102,7 @@ public class TestLettersOpt extends ProblemType1 implements ModelProvider {
         // run analysis
         model.solve();
 
-        f[0] = x[0];
+        f[0] = model.getTotalMass();
         computeStressConstraints();
 
         return f;
