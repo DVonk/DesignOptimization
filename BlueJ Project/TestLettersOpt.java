@@ -35,7 +35,7 @@ public class TestLettersOpt extends ProblemType1 implements ModelProvider {
     // - the constraint values f[1], f[2], ...
     double[] f;
     
-    double sigmaMax = 250; // N/mm^2
+    double sigmaMax = 2; // N/mm^2
 
     TestLettersRect letters;    
     Model model;
@@ -50,9 +50,10 @@ public class TestLettersOpt extends ProblemType1 implements ModelProvider {
         letters = new TestLettersRect();
         model = letters.getModel();
 
-        addDesignVariable("support bar widths [mm]", 10, 100, 200);
+        addDesignVariable("support bar width a [mm]", 10, 100, 200);
+        addDesignVariable("support bar width b [mm]", 10, 100, 200);
 
-        addFunctionName(0, "diameter [mm]");
+        addFunctionName(0, "Total Mass");
         for (int i = 0; i < model.getElements().length; i++) 
         {
             addFunctionName("stress member " + i + "at Node I");
@@ -87,14 +88,15 @@ public class TestLettersOpt extends ProblemType1 implements ModelProvider {
         f = new double[1 + countConstraints()];
         int elemID = model.getElements().length;
         // the support width
-        double b = x[0];
+        double a = x[0];
+        double b = x[1];
         ArrayList<Integer> nodes = letters.getOptimizeThis();
         int j;
         for(int i=0; i<nodes.size(); i++)
         {
             j = nodes.get(i);
             RectangleS cS = (RectangleS) model.getRealtable(j);
-            cS.setTKY(b);
+            cS.setTKY(a);
             cS.setTKZ(b);
         }
 

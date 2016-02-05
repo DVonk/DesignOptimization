@@ -122,7 +122,7 @@ public class TestLettersRect
 
     public TestLettersRect() 
     {
-        String line1 = "HELLO0234";
+        String line1 = "HELLO0123";
         // model
         model = new Model();
         int fixNode;
@@ -138,11 +138,8 @@ public class TestLettersRect
         double E = 210000; // N/mm^2 (modulus of elasticity)
         double rho = 7.88E-6; // kg/mm^2 (density of steel)
         model.createMaterial(1, E, rho);
-        int bar_diam = 60;
+        int bar_diam = 50;
         int bar_diam2 = 180;
-        //Seil
-        E = 110000;
-        model.createMaterial(2, E, rho);
         
         Force f = new Force();
         f.setValue(DOF.T_Y, -20.0); // N
@@ -172,8 +169,7 @@ public class TestLettersRect
                 RectangleS cS = model.createSection(elemID, rTable.TYPE, Beam3D.TYPE);
                 int[] thisNode = supportNodes[j];
                 int fstNode = thisNode[0];
-                int sndNode = thisNode[1];
-                System.out.println("j: " +j);    
+                int sndNode = thisNode[1]; 
                 optimizeThis.add(elemID);
                 // Beide if's checken ob Node X und/oder Y in thisNode = {X,Y} schon vorhanden sind, sonst werden sie erstellt
                 // es gibt insgesamt 18 nodes pro Buchstabe 9 Buchstabe und 9 für Gerüst dahinter. darum kommt man mit NodeNr + BuchstabenNr*18 zum gewünschten Node. 
