@@ -142,7 +142,7 @@ public class TestLettersRect
         int bar_diam2 = 180;
         
         Force f = new Force();
-        f.setValue(DOF.T_Y, -20.0); // N
+        f.setValue(DOF.T_Y, -30.0); // N
         Constraint c = new Constraint();
         c.setFree(DOF.T_X, false);
         c.setFree(DOF.T_Y, false);
